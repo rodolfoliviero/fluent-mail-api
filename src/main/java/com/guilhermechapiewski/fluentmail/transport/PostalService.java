@@ -45,7 +45,7 @@ public class PostalService {
 		message.setFrom(new InternetAddress(email.getFromAddress()));
 
 		for (String to : email.getToAddresses()) {
-			message.setRecipients(Message.RecipientType.TO, InternetAddress
+			message.addRecipients(Message.RecipientType.TO, InternetAddress
 					.parse(to));
 		}
 

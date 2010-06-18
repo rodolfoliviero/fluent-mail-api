@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.mail.Message;
 import javax.mail.Session;
@@ -60,9 +61,9 @@ public class PostalServiceTest {
 
 		final String from = "from.john@doe.com";
 
-		final String to = "to.john@doe.com";
-		final Set<String> tos = new HashSet<String>();
-		tos.add(to);
+		final TreeSet<String> tos = new TreeSet<String>();
+		tos.add("to.john@doe.com");
+		tos.add("to.lenon@doe.com");
 
 		final String cc = "cc.john@doe.com";
 		final Set<String> ccs = new HashSet<String>();
@@ -112,8 +113,13 @@ public class PostalServiceTest {
 		MimeMessage message = postalService.createMessage(email);
 
 		assertEquals(from, message.getFrom()[0].toString());
-		assertEquals(to, message.getRecipients(Message.RecipientType.TO)[0]
+		
+		//assert email to
+		assertEquals("Should add 2 emails to send email.", 2, message.getRecipients(Message.RecipientType.TO).length);
+		assertEquals(tos.first(), message.getRecipients(Message.RecipientType.TO)[0]
 				.toString());
+		assertEquals(tos.last(), message.getRecipients(Message.RecipientType.TO)[1].toString());
+		
 		assertEquals(cc, message.getRecipients(Message.RecipientType.CC)[0]
 				.toString());
 		assertEquals(bcc, message.getRecipients(Message.RecipientType.BCC)[0]

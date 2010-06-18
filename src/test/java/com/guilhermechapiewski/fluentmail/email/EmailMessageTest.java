@@ -19,6 +19,9 @@ import com.guilhermechapiewski.fluentmail.transport.PostalService;
 import com.guilhermechapiewski.fluentmail.validation.EmailAddressValidator;
 import com.guilhermechapiewski.fluentmail.validation.IncompleteEmailException;
 
+/**
+ * Tests to {@link EmailMessage}.
+ */
 public class EmailMessageTest {
 
 	Mockery context = new Mockery() {
