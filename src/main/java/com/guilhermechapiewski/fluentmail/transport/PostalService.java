@@ -1,5 +1,6 @@
 package com.guilhermechapiewski.fluentmail.transport;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 import java.util.Properties;
 
@@ -19,7 +20,7 @@ public class PostalService {
 	private static EmailTransportConfiguration emailTransportConfig = new EmailTransportConfiguration();
 	private static Session session;
 
-	public void send(Email email) throws AddressException, MessagingException {
+	public void send(Email email) throws AddressException, MessagingException, UnsupportedEncodingException {
 		Message message = createMessage(email);
 		send(message);
 	}
@@ -38,8 +39,8 @@ public class PostalService {
 		return session;
 	}
 
-	protected Message createMessage(Email email) throws MessagingException {
-		Message message = new MimeMessage(getSession());
+	protected Message createMessage(Email email) throws MessagingException, UnsupportedEncodingException {
+		MimeMessage message = new MimeMessage(getSession());
 		message.setFrom(new InternetAddress(email.getFromAddress()));
 
 		for (String to : email.getToAddresses()) {
@@ -56,12 +57,15 @@ public class PostalService {
 			message.setRecipients(Message.RecipientType.BCC, InternetAddress
 					.parse(bcc));
 		}
-
-		message.setSubject(email.getSubject());
-		message.setText(email.getBody());
-		message.setHeader("X-Mailer", "Fluent Mail API");
+		
+		message.setSubject(email.getSubject(), "UTF-8");
+		message.setText(email.getBody(), "UTF-8");
 		message.setSentDate(Calendar.getInstance().getTime());
-
+		
+		message.addHeader("Content-class", "urn:content-classes:calendarmessage");
+		message.setHeader("Content-type", "text/calendar; method=REQUEST; charset=UTF-8");
+		message.addHeader("Content-transfer-encoding", "8BIT");
+		
 		return message;
 	}
 
