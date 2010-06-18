@@ -1,7 +1,9 @@
 package com.guilhermechapiewski.fluentmail.email;
 
 import java.nio.charset.Charset;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import com.guilhermechapiewski.fluentmail.transport.EmailTransportException;
@@ -22,6 +24,7 @@ public class EmailMessage implements EmailBuilder, Email {
 	private String subject;
 	private String body;
 	private String charset = Charset.defaultCharset().name();
+	private Map<String, String> headers = new HashMap<String, String>();
 	
 	public void send() {
 		validateRequiredInfo();
@@ -144,5 +147,14 @@ public class EmailMessage implements EmailBuilder, Email {
 
 	public String getCharset() {
 		return charset;
+	}
+
+	public EmailBuilder addHeaders(String name, String value) {
+		headers.put(name, value);
+		return this;
+	}
+
+	public Map<String, String> getHeaders() {
+		return headers;
 	}
 }

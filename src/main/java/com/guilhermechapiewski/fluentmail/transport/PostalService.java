@@ -2,6 +2,7 @@ package com.guilhermechapiewski.fluentmail.transport;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -59,13 +60,14 @@ public class PostalService {
 		}
 		
 		String charset = email.getCharset();
+		
 		message.setSubject(email.getSubject(), charset);
 		message.setText(email.getBody(), charset);
 		message.setSentDate(Calendar.getInstance().getTime());
-		
-//		message.addHeader("Content-class", "urn:content-classes:calendarmessage");
-//		message.setHeader("Content-type", "text/calendar; method=REQUEST; charset=UTF-8");
-//		message.addHeader("Content-transfer-encoding", "8BIT");
+	
+		for (Map.Entry<String, String> pair : email.getHeaders().entrySet()) {
+			message.addHeader(pair.getKey(), pair.getValue());
+		}
 		
 		return message;
 	}

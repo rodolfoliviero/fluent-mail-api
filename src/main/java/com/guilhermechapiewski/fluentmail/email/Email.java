@@ -1,5 +1,6 @@
 package com.guilhermechapiewski.fluentmail.email;
 
+import java.util.Map;
 import java.util.Set;
 
 public interface Email {
@@ -17,4 +18,6 @@ public interface Email {
 	String getBody();
 	
 	String getCharset();
+	
+	Map<String, String> getHeaders();
 }

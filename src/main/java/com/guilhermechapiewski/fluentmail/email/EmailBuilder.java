@@ -16,6 +16,8 @@ public interface EmailBuilder {
 	EmailBuilder withBody(String body);
 	
 	EmailBuilder withCharset(String charset);
+	
+	EmailBuilder addHeaders(String name, String value);
 
 	void send();
 }

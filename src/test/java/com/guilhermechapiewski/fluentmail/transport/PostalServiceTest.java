@@ -3,7 +3,9 @@ package com.guilhermechapiewski.fluentmail.transport;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import javax.mail.Message;
@@ -96,6 +98,13 @@ public class PostalServiceTest {
 				
 				one(email).getCharset();
 				will(returnValue("UTF-8"));
+				
+				Map<String, String> headers = new HashMap<String, String>();
+				headers.put("Content-Type", "text/plain");
+				headers.put("Content-transfer-encoding", "8BIT");
+				
+				one(email).getHeaders();
+				will(returnValue(headers));
 			}
 		});
 
@@ -111,6 +120,9 @@ public class PostalServiceTest {
 				.toString());
 		assertEquals(subject, message.getSubject());
 		assertEquals(body, message.getContent());
+		
+		assertEquals("Should contain header.", "text/plain", message.getHeader("Content-Type")[0]);
+		assertEquals("Should contain header.", "8BIT", message.getHeader("Content-transfer-encoding")[0]);
 	}
 
 	@Test

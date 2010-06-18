@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.nio.charset.Charset;
+import java.util.Map;
 import java.util.Set;
 
 import org.jmock.Expectations;
@@ -303,5 +304,16 @@ public class EmailMessageTest {
 	public void should_build_email_with_default_charset() throws Exception {
 		EmailMessage email = (EmailMessage) new EmailMessage();
 		assertEquals("Should set charset.", Charset.defaultCharset().name(), email.getCharset());
+	}
+	
+	@Test
+	public void should_add_many_headers() throws Exception {
+		EmailMessage email = (EmailMessage) new EmailMessage()
+			.addHeaders("Content-type", "text/plain")
+			.addHeaders("Content-transfer-encoding", "8BIT");
+		
+		Map<String, String> headers = email.getHeaders();
+		assertEquals("Should contain header.", "text/plain", headers.get("Content-type"));
+		assertEquals("Should contain header.", "8BIT", headers.get("Content-transfer-encoding"));
 	}
 }
