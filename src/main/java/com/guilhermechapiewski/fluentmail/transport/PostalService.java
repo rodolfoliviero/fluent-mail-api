@@ -39,7 +39,7 @@ public class PostalService {
 		return session;
 	}
 
-	protected Message createMessage(Email email) throws MessagingException, UnsupportedEncodingException {
+	protected MimeMessage createMessage(Email email) throws MessagingException, UnsupportedEncodingException {
 		MimeMessage message = new MimeMessage(getSession());
 		message.setFrom(new InternetAddress(email.getFromAddress()));
 
@@ -58,13 +58,14 @@ public class PostalService {
 					.parse(bcc));
 		}
 		
-		message.setSubject(email.getSubject(), "UTF-8");
-		message.setText(email.getBody(), "UTF-8");
+		String charset = email.getCharset();
+		message.setSubject(email.getSubject(), charset);
+		message.setText(email.getBody(), charset);
 		message.setSentDate(Calendar.getInstance().getTime());
 		
-		message.addHeader("Content-class", "urn:content-classes:calendarmessage");
-		message.setHeader("Content-type", "text/calendar; method=REQUEST; charset=UTF-8");
-		message.addHeader("Content-transfer-encoding", "8BIT");
+//		message.addHeader("Content-class", "urn:content-classes:calendarmessage");
+//		message.setHeader("Content-type", "text/calendar; method=REQUEST; charset=UTF-8");
+//		message.addHeader("Content-transfer-encoding", "8BIT");
 		
 		return message;
 	}

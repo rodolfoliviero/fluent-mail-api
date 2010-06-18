@@ -15,4 +15,6 @@ public interface Email {
 	String getSubject();
 	
 	String getBody();
+	
+	String getCharset();
 }

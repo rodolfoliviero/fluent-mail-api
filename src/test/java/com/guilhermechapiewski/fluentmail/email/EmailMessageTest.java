@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.nio.charset.Charset;
 import java.util.Set;
 
 import org.jmock.Expectations;
@@ -50,13 +51,16 @@ public class EmailMessageTest {
 
 				one(email).withBody("body");
 				will(returnValue(email));
-
+				
+				one(email).withCharset("UTF-8");
+				will(returnValue(email));
+				
 				one(email).send();
 			}
 		});
 
 		email.from("email@from.com").to("email@to.com").withSubject("subject")
-				.withBody("body").send();
+				.withBody("body").withCharset("UTF-8").send();
 	}
 
 	@Test
@@ -287,5 +291,17 @@ public class EmailMessageTest {
 		});
 
 		email.send();
+	}
+	
+	@Test
+	public void should_allow_set_charset() throws Exception {
+		EmailMessage email = (EmailMessage) new EmailMessage().withCharset("UTF-8");
+		assertEquals("Should set charset.", "UTF-8", email.getCharset());
+	}
+	
+	@Test
+	public void should_build_email_with_default_charset() throws Exception {
+		EmailMessage email = (EmailMessage) new EmailMessage();
+		assertEquals("Should set charset.", Charset.defaultCharset().name(), email.getCharset());
 	}
 }

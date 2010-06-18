@@ -1,5 +1,6 @@
 package com.guilhermechapiewski.fluentmail.email;
 
+
 public interface EmailBuilder {
 
 	EmailBuilder from(String address);
@@ -13,6 +14,8 @@ public interface EmailBuilder {
 	EmailBuilder withSubject(String subject);
 
 	EmailBuilder withBody(String body);
+	
+	EmailBuilder withCharset(String charset);
 
 	void send();
 }

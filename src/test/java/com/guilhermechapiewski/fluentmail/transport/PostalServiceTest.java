@@ -8,6 +8,7 @@ import java.util.Set;
 
 import javax.mail.Message;
 import javax.mail.Session;
+import javax.mail.internet.MimeMessage;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -92,11 +93,14 @@ public class PostalServiceTest {
 
 				one(email).getBody();
 				will(returnValue(body));
+				
+				one(email).getCharset();
+				will(returnValue("UTF-8"));
 			}
 		});
 
 		PostalService postalService = new PostalService();
-		Message message = postalService.createMessage(email);
+		MimeMessage message = postalService.createMessage(email);
 
 		assertEquals(from, message.getFrom()[0].toString());
 		assertEquals(to, message.getRecipients(Message.RecipientType.TO)[0]

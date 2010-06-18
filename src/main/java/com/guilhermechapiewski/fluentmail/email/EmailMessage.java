@@ -1,5 +1,6 @@
 package com.guilhermechapiewski.fluentmail.email;
 
+import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,7 +21,8 @@ public class EmailMessage implements EmailBuilder, Email {
 	private Set<String> bccAddresses = new HashSet<String>();
 	private String subject;
 	private String body;
-
+	private String charset = Charset.defaultCharset().name();
+	
 	public void send() {
 		validateRequiredInfo();
 		validateAddresses();
@@ -68,6 +70,11 @@ public class EmailMessage implements EmailBuilder, Email {
 		for (int i = 0; i < addresses.length; i++) {
 			this.ccAddresses.add(addresses[i]);
 		}
+		return this;
+	}
+	
+	public EmailBuilder withCharset(String charset) {
+		this.charset = charset;
 		return this;
 	}
 
@@ -133,5 +140,9 @@ public class EmailMessage implements EmailBuilder, Email {
 
 	public static void setPostalService(PostalService postalService) {
 		EmailMessage.postalService = postalService;
+	}
+
+	public String getCharset() {
+		return charset;
 	}
 }
