@@ -29,10 +29,8 @@ public class PostalService {
 	protected Session getSession() {
 		if (session == null) {
 			Properties properties = System.getProperties();
-			properties.put("mail.smtp.host", emailTransportConfig
-					.getSmtpServer());
-			properties.put("mail.smtp.auth", emailTransportConfig
-					.isAuthenticationRequired());
+			properties.put("mail.smtp.host", emailTransportConfig.getSmtpServer());
+			properties.put("mail.smtp.auth", emailTransportConfig.isAuthenticationRequired());
 
 			session = Session.getInstance(properties);
 		}
@@ -72,14 +70,12 @@ public class PostalService {
 		return message;
 	}
 
-	protected void send(Message message) throws NoSuchProviderException,
-			MessagingException {
-		SMTPTransport smtpTransport = (SMTPTransport) getSession()
-				.getTransport(getProtocol());
+	protected void send(Message message) throws NoSuchProviderException, MessagingException {
+		SMTPTransport smtpTransport = (SMTPTransport) getSession().getTransport(getProtocol());
+		
 		if (emailTransportConfig.isAuthenticationRequired()) {
 			smtpTransport.connect(emailTransportConfig.getSmtpServer(),
-					emailTransportConfig.getUsername(), emailTransportConfig
-							.getPassword());
+					emailTransportConfig.getUsername(), emailTransportConfig.getPassword());
 		} else {
 			smtpTransport.connect();
 		}

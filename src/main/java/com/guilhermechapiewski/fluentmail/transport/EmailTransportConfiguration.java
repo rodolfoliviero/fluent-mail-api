@@ -22,25 +22,20 @@ public class EmailTransportConfiguration {
 		Properties properties = loadProperties();
 
 		String smtpServer = properties.getProperty(KEY_SMTP_SERVER);
-		boolean authenticationRequired = Boolean
-				.parseBoolean(KEY_AUTH_REQUIRED);
-		boolean useSecureSmtp = Boolean.parseBoolean(KEY_USE_SECURE_SMTP);
 		String username = properties.getProperty(KEY_USERNAME);
 		String password = properties.getProperty(KEY_PASSWORD);
+		
+		boolean authenticationRequired = Boolean.parseBoolean(properties.getProperty(KEY_AUTH_REQUIRED));
+		boolean useSecureSmtp = Boolean.parseBoolean(properties.getProperty(KEY_USE_SECURE_SMTP));
 
-		configure(smtpServer, authenticationRequired, useSecureSmtp, username,
-				password);
+		configure(smtpServer, authenticationRequired, useSecureSmtp, username, password);
 	}
 	
 	private static Properties loadProperties() {
 		Properties properties = new Properties();
-
-		InputStream inputStream = EmailTransportConfiguration.class
-				.getResourceAsStream(PROPERTIES_FILE);
-
-		if (inputStream == null) {
-			inputStream = EmailTransportConfiguration.class
-					.getResourceAsStream("/" + PROPERTIES_FILE);
+		InputStream inputStream = EmailTransportConfiguration.class.getResourceAsStream(PROPERTIES_FILE);
+		if (inputStream == null){ 
+			inputStream = EmailTransportConfiguration.class.getResourceAsStream("/".concat(PROPERTIES_FILE));
 		}
 
 		try {
@@ -50,19 +45,6 @@ public class EmailTransportConfiguration {
 		}
 
 		return properties;
-	}
-
-	/**
-	 * Configure mail transport to use the specified SMTP server. Because this
-	 * configuration mode does not require to inform username and password, it
-	 * assumes that authentication and secure SMTP are not required.
-	 * 
-	 * @param smtpServer
-	 *            The SMTP server to use for mail transport. To use a specific
-	 *            port, user the syntax server:port.
-	 */
-	public static void configure(String smtpServer) {
-		configure(smtpServer, false, false, null, null);
 	}
 
 	/**
@@ -80,8 +62,8 @@ public class EmailTransportConfiguration {
 	 *            The SMTP password.
 	 */
 	public static void configure(String smtpServer,
-			boolean authenticationRequired, boolean useSecureSmtp,
-			String username, String password) {
+			boolean authenticationRequired, boolean useSecureSmtp, String username, String password) {
+		
 		EmailTransportConfiguration.smtpServer = smtpServer;
 		EmailTransportConfiguration.authenticationRequired = authenticationRequired;
 		EmailTransportConfiguration.useSecureSmtp = useSecureSmtp;
@@ -108,5 +90,4 @@ public class EmailTransportConfiguration {
 	public boolean useSecureSmtp() {
 		return useSecureSmtp;
 	}
-
 }
